@@ -3,7 +3,6 @@ import * as commander from 'commander';
 import chalk from 'chalk';
 import * as ora from 'ora';
 import * as actions from './fetch';
-import * as config from './config';
 const pkg = require('../package.json');
 
 let executed = false;
@@ -13,47 +12,46 @@ commander
 	.description(pkg.description)
 
 commander
-	.command('setup <key> <secret>')
-	.alias('s')
-	.description('Setup the API keys for Binance')
-	.action(function (key: string, secret: string) {
-		executed = true;
-		config.setBinance(key, secret);
-		console.log(chalk.green('Successfully set key and secret.'));
-	});
-
-commander
-	.command('price <symbol>')
+	.command('price <coin>')
 	.alias('p')
-	.description('Fetch the price of the given coin')
-	.action(function (symbol: string) {
+	.description('A quick conversion of the price of the coin into (USD and BTC)')
+	.action(function (coin: string) {
 		executed = true;
-		const spinner = ora('Fetching price...').start();
-		actions.getPrice(symbol).then(function (price) {
+		let to: string[] = ['USD', 'BTC', 'ETH'];
+		let spinner = ora('Loading prices').start();
+		actions.convertPrice(coin, to).then((data: any) => {
 			spinner.stop();
-			console.log(symbol + ": " + chalk.green(price as string));
-		}).catch(function (error) {
-			spinner.stop();
+			// Create an output with every value
+			let output: string = '';
+			to.forEach(element => {
+				output += `${element}: ${chalk.green(data[element])}\n`;
+			});
+			console.log(`\nPrice of ${coin}\n${output}`);
+		}).catch((error) => {
 			console.log(chalk.red(error));
+			spinner.stop();
 		});
 	});
 
 commander
-	.command('update <symbol> <period>')
-	.alias('u')
-	.description('Get candlesticks updates on a specific coin with a time period')
-	.action(function (symbol: string, period: string) {
+	.command('convert <from> <to...>')
+	.alias('c')
+	.description('Convert the price of a coin to other coins/currencies')
+	.action(function (from: string, to: string[]) {
 		executed = true;
-		actions.candlestickUpdates(symbol, period);
-	});
-
-commander
-	.command('watch')
-	.alias('w')
-	.description('Watch the coins stored in the config and send messages on specific thresholds or requirements are met')
-	.action(function (symbol: string, period: string) {
-		executed = true;
-		actions.candlestickUpdates(symbol, period);
+		let spinner = ora('Loading prices').start();
+		actions.convertPrice(from, to).then((data: any) => {
+			spinner.stop();
+			// Create an output with every value
+			let output: string = '';
+			to.forEach(element => {
+				output += `${element}: ${chalk.green(data[element])}\n`;
+			});
+			console.log(`\nPrice of ${from}\n${output}`);
+		}).catch((error) => {
+			console.log(chalk.red(error));
+			spinner.stop();
+		});
 	});
 
 commander.parse(process.argv);

@@ -5,43 +5,51 @@ var commander = require("commander");
 var chalk_1 = require("chalk");
 var ora = require("ora");
 var actions = require("./fetch");
-var config = require("./config");
 var pkg = require('../package.json');
 var executed = false;
 commander
     .version(pkg.version)
     .description(pkg.description);
 commander
-    .command('setup <key> <secret>')
-    .alias('s')
-    .description('Setup the API keys for Binance')
-    .action(function (key, secret) {
-    executed = true;
-    config.setBinance(key, secret);
-    console.log(chalk_1.default.green('Successfully set key and secret.'));
-});
-commander
-    .command('price <type>')
+    .command('price <coin>')
     .alias('p')
-    .description('Fetch the price of the given coin')
-    .action(function (symbol) {
+    .description('A quick conversion of the price of the coin into (USD and BTC)')
+    .action(function (coin) {
     executed = true;
-    var spinner = ora('Fetching price...').start();
-    actions.getPrice(symbol).then(function (price) {
+    var to = ['USD', 'BTC', 'ETH'];
+    var spinner = ora('Loading prices').start();
+    actions.convertPrice(coin, to).then(function (data) {
         spinner.stop();
-        console.log(symbol + ": " + chalk_1.default.green(price));
+        // Create an output with every value
+        var output = '';
+        to.forEach(function (element) {
+            output += element + ": " + chalk_1.default.green(data[element]) + "\n";
+        });
+        console.log("\nPrice of " + coin + "\n" + output);
     }).catch(function (error) {
-        spinner.stop();
         console.log(chalk_1.default.red(error));
+        spinner.stop();
     });
 });
 commander
-    .command('update <type> <period>')
-    .alias('u')
-    .description('Fetch the price of the given coin')
-    .action(function (symbol, period) {
+    .command('convert <from> <to...>')
+    .alias('c')
+    .description('Convert the price of a coin to other coins/currencies')
+    .action(function (from, to) {
     executed = true;
-    actions.candlestickUpdates(symbol, period);
+    var spinner = ora('Loading prices').start();
+    actions.convertPrice(from, to).then(function (data) {
+        spinner.stop();
+        // Create an output with every value
+        var output = '';
+        to.forEach(function (element) {
+            output += element + ": " + chalk_1.default.green(data[element]) + "\n";
+        });
+        console.log("\nPrice of " + from + "\n" + output);
+    }).catch(function (error) {
+        console.log(chalk_1.default.red(error));
+        spinner.stop();
+    });
 });
 commander.parse(process.argv);
 if (!executed) {
