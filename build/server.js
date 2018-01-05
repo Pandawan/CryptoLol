@@ -74,7 +74,7 @@ bot.hear([/^\s*p(?:rice)?\s*(?:of)?\s*$/i], (payload, chat, data) => {
 bot.hear([/^\s*c(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S*)\s*$/i], (payload, chat, data) => {
 	if (data.captured) return;
 
-	let amount = data.match[1].toUpperCase();
+	let amount = data.match[1];
 	let from = data.match[2].toUpperCase();
 	let to = data.match[3].toUpperCase();
 
