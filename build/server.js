@@ -82,7 +82,7 @@ bot.hear([/^\s*c(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S
 		// Create an output with every value
 		let output = '';
 		if (to && response[to]) {
-			ouput += `${amount} ${from} is ${response[to] * amount} ${to}`;
+			output += `${amount} ${from} is ${response[to] * amount} ${to}`;
 			chat.say(`${output}`, {
 				typing: true
 			});
