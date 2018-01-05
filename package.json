@@ -1,36 +1,45 @@
 {
-  "name": "cryptolol",
-  "version": "1.0.0",
-  "description": "A tool to watch & manage crypto currency",
-  "main": "./build/index.js",
-  "scripts": {
-    "start": "node build/server.js",
-    "watch": "gulp watch"
-  },
-  "keywords": [
-    "crypto"
-  ],
-  "author": "Pandawan",
-  "license": "MIT",
-  "dependencies": {
-    "axios": "^0.17.1",
-    "bootbot": "^1.0.14",
-    "chalk": "^2.3.0",
-    "commander": "^2.12.2",
-    "configstore": "^3.1.1",
-    "core-js": "^2.5.3",
-    "ora": "^1.3.0"
-  },
-  "devDependencies": {
-    "@types/axios": "^0.14.0",
-    "@types/commander": "^2.12.2",
-    "@types/configstore": "^2.1.1",
-    "@types/core-js": "^0.9.43",
-    "@types/node": "^8.5.2",
-    "@types/ora": "^1.3.1",
-    "gulp": "^3.9.1",
-    "gulp-beautify": "^2.0.1",
-    "gulp-typescript": "^3.2.3",
-    "typescript": "^2.6.2"
-  }
+	"name": "cryptolol",
+	"version": "1.0.0",
+	"description": "A messenger bot which gives you information about Crypto Currencies",
+	"main": "./build/index.js",
+	"scripts": {
+		"start": "node build/server.js",
+		"watch": "gulp watch"
+	},
+	"keywords": [
+		"crypto"
+	],
+	"author": "Pandawan",
+	"license": "MIT",
+	"homepage": "https://github.com/PandawanFr/CryptoLol",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/PandawanFr/CryptoLol.git"
+	},
+	"bugs": {
+		"url": "https://github.com/PandawanFr/CryptoLol/issues",
+		"email": "project@hostname.com"
+	},
+	"dependencies": {
+		"axios": "^0.17.1",
+		"bootbot": "^1.0.14",
+		"chalk": "^2.3.0",
+		"commander": "^2.12.2",
+		"configstore": "^3.1.1",
+		"core-js": "^2.5.3",
+		"ora": "^1.3.0"
+	},
+	"devDependencies": {
+		"@types/axios": "^0.14.0",
+		"@types/commander": "^2.12.2",
+		"@types/configstore": "^2.1.1",
+		"@types/core-js": "^0.9.43",
+		"@types/node": "^8.5.2",
+		"@types/ora": "^1.3.1",
+		"gulp": "^3.9.1",
+		"gulp-beautify": "^2.0.1",
+		"gulp-typescript": "^3.2.3",
+		"typescript": "^2.6.2"
+	}
 }
