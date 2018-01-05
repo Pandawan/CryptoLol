@@ -78,7 +78,7 @@ bot.hear([/^\s*c(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S
 	let from = data.match[2].toUpperCase();
 	let to = data.match[3].toUpperCase();
 
-	fetch.convertPrice(from, to).then((response) => {
+	fetch.convertPrice(from, [to]).then((response) => {
 		// Create an output with every value
 		let output = '';
 		if (to && response[to]) {
