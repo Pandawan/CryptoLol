@@ -20,24 +20,34 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
-bot.hear([/^\s*price\s*$/i], (payload, chat, data) => {
-	chat.say('Please specify for which currency you want the price of (BTC, ETH...)', {
+bot.hear([/^\s*p(?:rice)\s*$/i], (payload, chat, data) => {
+	chat.say('Please specify for which currency you want the prices (BTC, ETH...)', {
 		typing: true
 	});
 });
 
-bot.hear([/^\s*price\s+(.*)\s*$/i], (payload, chat, data) => {
+bot.hear([/^\s*p(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
 	let query = data.match[1].toUpperCase();
 	let to = ['USD', 'BTC', 'ETH'];
 	fetch.convertPrice(query, to).then((response) => {
 		// Create an output with every value
 		let output = '';
 		to.forEach(element => {
-			output += `${element}: ${response[element]}\n`;
+			// If element is undefined or has a problem
+			if (element) {
+				output += `${element}: ${response[element]}\n`;
+			}
 		});
-		chat.say(`Price of ${query}\n${output}`, {
-			typing: true
-		});
+		// If output is empty, then something went wrong...
+		if (!output) {
+			chat.say(`Nothing found for ${query}.`, {
+				typing: true
+			});
+		} else {
+			chat.say(`Price of ${query}\n${output}`, {
+				typing: true
+			});
+		}
 	}).catch((error) => {
 		console.log(error);
 		chat.say('Oops, something went wrong...', {

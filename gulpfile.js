@@ -22,4 +22,6 @@ gulp.task('js', function () {
 gulp.task('watch', ['ts', 'js'], function () {
 	gulp.watch(tsProject.config.include, ['ts']);
 	gulp.watch('src/**/*.js', ['js']);
-})
+});
+
+gulp.task('build', ['ts', 'js']);
