@@ -27,7 +27,7 @@ bot.hear([/price (.*)/i], (payload, chat, data) => {
 		// Create an output with every value
 		let output = '';
 		to.forEach(element => {
-			output += `${element}: ${data[element]}\n`;
+			output += `${element}: ${response[element]}\n`;
 		});
 		chat.say(`Price of ${query}\n${output}`);
 	}).catch((error) => {
