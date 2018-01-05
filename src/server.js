@@ -16,5 +16,5 @@ bot.on('message', (payload, chat) => {
 	console.log(`Sent message: "Echo: ${text}"`)
 });
 
-bot.start();
+bot.start(process.env.PORT || 3000);
 console.log('Bot started!');
