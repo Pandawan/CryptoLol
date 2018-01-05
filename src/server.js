@@ -18,7 +18,7 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 
 bot.hear([/price (.*)/i], (payload, chat, data) => {
 	let query = data.match[1];
-	console.log(data.match);
+	console.log(data);
 	fetch.convertPrice(query, ['USD', 'BTC', 'ETH']).then((response) => {
 		// Create an output with every value
 		let output = '';
