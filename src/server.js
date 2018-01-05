@@ -27,9 +27,18 @@ bot.hear([/^\s*p(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
 		// Create an output with every value
 		let output = '';
 		to.forEach(element => {
-			output += `${element}: ${response[element]}\n`;
+			// If element is undefined or has a problem
+			if (element) {
+				output += `${element}: ${response[element]}\n`;
+			}
 		});
+		// If output is empty, then something went wrong...
+		if (!output) {
+			chat.say(`Nothing found for ${query}.`, {typing:true});
+		}
+		else {
 		chat.say(`Price of ${query}\n${output}`, {typing:true});
+		}
 	}).catch((error) => {
 		console.log(error);
 		chat.say('Oops, something went wrong...', {typing:true}).then(() => {
