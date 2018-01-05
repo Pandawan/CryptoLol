@@ -13,20 +13,20 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 		chat.say('I\'m CryptoLol!', {
 			typing: true
 		}).then(() => {
-			chat.say('I give you important information about popular Crypto Currencies.', {
+			chat.say('I can help you check out information about Crypto Currencies.', {
 				typing: true
 			});
 		});
 	});
 });
 
-bot.hear([/price/i], (payload, chat, data) => {
+bot.hear([/^\s*price\s*$/i], (payload, chat, data) => {
 	chat.say('Please specify for which currency you want the price of (BTC, ETH...)', {
 		typing: true
 	});
 });
 
-bot.hear([/price (.*)/i], (payload, chat, data) => {
+bot.hear([/^\s*price\s+(.*)\s*$/i], (payload, chat, data) => {
 	let query = data.match[1].toUpperCase();
 	let to = ['USD', 'BTC', 'ETH'];
 	fetch.convertPrice(query, to).then((response) => {
