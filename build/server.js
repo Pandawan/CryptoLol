@@ -34,13 +34,12 @@ bot.hear([/^\s*p(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
 		let output = '';
 		to.forEach(element => {
 			// If element is undefined or has a problem
-			if (element) {
+			if (element && response[element]) {
 				output += `${element}: ${response[element]}\n`;
 			}
 		});
-		console.log(`"${output}"`);
 		// If output is empty, then something went wrong...
-		if (!output || output == '') {
+		if (!output) {
 			chat.say(`Nothing found for ${query}.`, {
 				typing: true
 			});
