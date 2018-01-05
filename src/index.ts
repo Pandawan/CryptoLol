@@ -56,7 +56,6 @@ commander
 
 commander.parse(process.argv);
 
-
 if (!executed) {
 	commander.help();
 }

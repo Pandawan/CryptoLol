@@ -4,7 +4,8 @@
   "description": "A tool to watch & manage crypto currency",
   "main": "./build/index.js",
   "scripts": {
-	  "watch": "gulp watch"
+    "start": "node build/server.js",
+    "watch": "gulp watch"
   },
   "keywords": [
     "crypto"
@@ -13,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.17.1",
+    "bootbot": "^1.0.14",
     "chalk": "^2.3.0",
     "commander": "^2.12.2",
     "configstore": "^3.1.1",

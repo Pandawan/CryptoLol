@@ -7,10 +7,7 @@ function getSingleTicker(symbol) {
         axios_1.default.get("https://api.coinmarketcap.com/v1/ticker/" + symbol + "/")
             .then(function (response) {
             resolve(response.data[0]);
-        })
-            .catch(function (error) {
-            reject(error);
-        });
+        }).catch(reject);
     });
 }
 exports.getSingleTicker = getSingleTicker;
@@ -20,10 +17,7 @@ function convertPrice(from, to) {
         axios_1.default.get("https://min-api.cryptocompare.com/data/price?fsym=" + from + "&tsyms=" + to.join(','))
             .then(function (response) {
             resolve(response.data);
-        })
-            .catch(function (error) {
-            reject(error);
-        });
+        }).catch(reject);
     });
 }
 exports.convertPrice = convertPrice;
