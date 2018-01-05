@@ -16,11 +16,11 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
-bot.hear([/^\s*price\s*$/i], (payload, chat, data) => {
-	chat.say('Please specify for which currency you want the price of (BTC, ETH...)', {typing:true});
+bot.hear([/^\s*p(?:rice)\s*$/i], (payload, chat, data) => {
+	chat.say('Please specify for which currency you want the prices (BTC, ETH...)', {typing:true});
 });
 
-bot.hear([/^\s*price\s+(.*)\s*$/i], (payload, chat, data) => {
+bot.hear([/^\s*p(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
 	let query = data.match[1].toUpperCase();
 	let to = ['USD', 'BTC', 'ETH'];
 	fetch.convertPrice(query, to).then((response) => {
