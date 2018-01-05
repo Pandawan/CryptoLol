@@ -23,7 +23,7 @@ bot.hear([/price (.*)/i], (payload, chat, data) => {
 		// Create an output with every value
 		let output = '';
 		to.forEach(element => {
-			output += `${element}: ${chalk.green(data[element])}\n`;
+			output += `${element}: ${data[element]}\n`;
 		});
 		chat.say(`Price of ${query}\n${output}`);
 	}).catch((error) => {
