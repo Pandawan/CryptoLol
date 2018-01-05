@@ -7,7 +7,7 @@ const bot = new bootbot({
 	appSecret: process.env.APP_SECRET
 });
 
-bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) => {
+bot.hear([/^hello( there)?/i, /^hi( there)?/i, /^hey( there)?/i, /^start/i, /^get\s*started/i], (payload, chat) => {
 	// Send a text message followed by another text message that contains a typing indicator
 	chat.say('Hello, human friend!').then(() => {
 		chat.say('I\'m CryptoLol!', {
@@ -20,7 +20,7 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
-bot.hear([/^\s*p(?:rice)\s*$/i], (payload, chat, data) => {
+bot.hear([/^\s*p(?:rice)?\s*$/i], (payload, chat, data) => {
 	chat.say('Please specify for which currency you want the prices (BTC, ETH...)', {
 		typing: true
 	});
@@ -38,8 +38,9 @@ bot.hear([/^\s*p(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
 				output += `${element}: ${response[element]}\n`;
 			}
 		});
+		console.log(`"${output}"`);
 		// If output is empty, then something went wrong...
-		if (!output) {
+		if (!output || output == '') {
 			chat.say(`Nothing found for ${query}.`, {
 				typing: true
 			});
