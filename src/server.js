@@ -16,8 +16,12 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
+bot.hear([/price/i], (payload, chat, data) => {
+	chat.say('Please specify for which currency you want the price of (BTC, ETH...)', {typing:true});
+});
+
 bot.hear([/price (.*)/i], (payload, chat, data) => {
-	let query = data.match[1].toUpperCase() || 'BTC';
+	let query = data.match[1].toUpperCase();
 	let to = ['USD', 'BTC', 'ETH'];
 	fetch.convertPrice(query, to).then((response) => {
 		// Create an output with every value
@@ -25,10 +29,10 @@ bot.hear([/price (.*)/i], (payload, chat, data) => {
 		to.forEach(element => {
 			output += `${element}: ${response[element]}\n`;
 		});
-		chat.say(`Price of ${query}\n${output}`);
+		chat.say(`Price of ${query}\n${output}`, {typing:true});
 	}).catch((error) => {
 		console.log(error);
-		chat.say('Oops, something went wrong...').then(() => {
+		chat.say('Oops, something went wrong...', {typing:true}).then(() => {
 			chat.say(error.message);
 		});
 	});
