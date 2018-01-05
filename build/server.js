@@ -26,7 +26,7 @@ bot.on('error', (err) => {
 
 bot.on('message', (payload, chat) => {
 	const text = payload.message.text;
-	console.log(payload);
+	console.log(chat);
 	chat.say(`Echo: ${text}`);
 	console.log(`Sent message: "Echo: ${text}"`)
 });
