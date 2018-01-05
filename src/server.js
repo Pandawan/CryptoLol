@@ -1,4 +1,5 @@
 const bootbot = require('bootbot');
+const fetch = require('./fetch');
 
 const bot = new bootbot({
 	accessToken: process.env.ACCESS_TOKEN,
@@ -15,16 +16,35 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
+bot.hear([/price (.*)/i], (payload, chat, data) => {
+	let query = data.match[1];
+	fetch.convertPrice(query, ['USD', 'BTC', 'ETH']).then((response) => {
+		// Create an output with every value
+		let output = '';
+		to.forEach(element => {
+			output += `${element}: ${chalk.green(data[element])}\n`;
+		});
+		chat.say(`Price of ${query}\n${output}`);
+	}).catch((error) => {
+		chat.say('Oops, something went wrong...').then(() => {
+			chat.say(error.message);
+		});
+	});
+});
+
 
 bot.on('error', (err) => {
 	console.log(err.message);
 });
 
-bot.on('message', (payload, chat) => {
+// TODO: Make a system for basic menu/message
+bot.on('message', (payload, chat, data) => {
 	const text = payload.message.text;
-	console.log(chat);
-	chat.say(`Echo: ${text}`);
-	console.log(`Sent message: "Echo: ${text}"`)
+
+	// If this message was not used by any previous system (not recognized)
+	if (!data.captured) {
+		chat.say('Sorry, I don\'t understand...');
+	}
 });
 
 bot.start(process.env.PORT || 3000);
