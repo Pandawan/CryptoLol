@@ -1,18 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var bootbot_1 = require("bootbot");
-var bot = new bootbot_1.bootbot({
-    accessToken: process.env.ACCESS_TOKEN,
-    verifyToken: process.env.VERIFY_TOKEN,
-    appSecret: process.env.APP_SECRET
+const bootbot = require('bootbot');
+
+const bot = new bootbot({
+	accessToken: process.env.ACCESS_TOKEN,
+	verifyToken: process.env.VERIFY_TOKEN,
+	appSecret: process.env.APP_SECRET
 });
-bot.on('error', function (err) {
-    console.log(err.message);
+
+bot.on('error', (err) => {
+	console.log(err.message);
 });
-bot.on('message', function (payload, chat) {
-    var text = payload.message.text;
-    chat.say("Echo: " + text);
-    console.log("Sent message: \"Echo: " + text + "\"");
+
+bot.on('message', (payload, chat) => {
+	const text = payload.message.text;
+	chat.say(`Echo: ${text}`);
+	console.log(`Sent message: "Echo: ${text}"`)
 });
+
 bot.start();
 console.log('Bot started!');

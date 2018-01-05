@@ -1,4 +1,4 @@
-import { bootbot } from 'bootbot';
+const bootbot = require('bootbot');
 
 const bot = new bootbot({
 	accessToken: process.env.ACCESS_TOKEN,
@@ -6,11 +6,11 @@ const bot = new bootbot({
 	appSecret: process.env.APP_SECRET
 });
 
-bot.on('error', (err: Error) => {
+bot.on('error', (err) => {
 	console.log(err.message);
 });
 
-bot.on('message', (payload: any, chat: any) => {
+bot.on('message', (payload, chat) => {
 	const text = payload.message.text;
 	chat.say(`Echo: ${text}`);
 	console.log(`Sent message: "Echo: ${text}"`)
