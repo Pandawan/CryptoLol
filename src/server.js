@@ -113,7 +113,7 @@ bot.hear([/\s*\bs(?:ub(?:scribe)?)?\s+(?:to\s+)?\s*(\S*)\s*/i], (payload, chat, 
 		chat.say({
 			text: 'Subscribed to ' + coin,
 			buttons: [
-				{ type: 'postback', title: 'Cancel Subscription', payload: 'UNSUB_' + coin },
+				//{ type: 'postback', title: 'Cancel Subscription', payload: 'UNSUB_' + coin }, NOT YET AVAILABLE
 				{ type: 'postback', title: 'View Subs', payload: 'VIEW_SUBS' }
 			]
 		}, { typing: true });
