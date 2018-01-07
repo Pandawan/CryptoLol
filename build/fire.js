@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var admin = require("firebase-admin");
-var serviceAccount = require('../config/serviceAccountKey.json');
+var serviceAccount = process.env.FIRE_SERVICE_ACCOUNT;
 function init() {
     // If not yet initialized
     if (admin.apps.length === 0) {

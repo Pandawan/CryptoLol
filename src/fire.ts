@@ -1,5 +1,6 @@
 import * as admin from 'firebase-admin';
-const serviceAccount = require('../config/serviceAccountKey.json');
+import { ServiceAccount } from 'firebase-admin';
+const serviceAccount = process.env.FIRE_SERVICE_ACCOUNT as string | ServiceAccount;
 
 export function init() {
 	// If not yet initialized
