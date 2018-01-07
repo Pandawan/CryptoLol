@@ -1,5 +1,6 @@
 const bootbot = require('bootbot');
 const fetch = require('./fetch');
+const fire = require('./fire');
 
 const bot = new bootbot({
 	accessToken: process.env.ACCESS_TOKEN,
@@ -99,6 +100,23 @@ bot.hear([/\s*c(?:onvert)?\s*(?:.*)?\s*$/i], (payload, chat, data) => {
 			typing: true
 		});
 	})
+});
+
+// t(est) XXX
+bot.hear([/\s*t(?:est)?\s+(.*)\s*$/i], (payload, chat, data) => {
+	let userId = payload.sender.id;
+	let coin = data.match[1].toUpperCase();
+	// Add Subcription for given coin
+	fire.addSub(userId, coin).then((response) => {
+		chat.say("Success!");
+	}).catch((error) => {
+		console.log(error);
+		chat.say('Oops, something went wrong...', {
+			typing: true
+		}).then(() => {
+			chat.say(error.message);
+		});
+	});
 });
 
 bot.on('error', (err) => {

@@ -12,3 +12,22 @@ function init() {
     }
 }
 exports.init = init;
+// Add a subscription to the given coin
+function addSub(id, coin) {
+    return new Promise(function (resolve, reject) {
+        // Get a Database Object
+        var db = admin.firestore();
+        // Create a temporary object to store the future value
+        var updateObj = {
+            subs: {}
+        };
+        updateObj["subs"][coin] = true;
+        // Tell database to update the object
+        db.collection('users').doc(id).set(updateObj, { merge: true }).then(function () {
+            resolve();
+        }).catch(function (error) {
+            reject(error);
+        });
+    });
+}
+exports.addSub = addSub;
