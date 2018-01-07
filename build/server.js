@@ -21,13 +21,13 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
-bot.hear([/\s*\bp(?:rice)\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bp(?:rice)\s*/i], (payload, chat, data) => {
 	chat.say('Please specify for which currency you want the prices (BTC, ETH...)', {
 		typing: true
 	});
 });
 
-bot.hear([/\s*\bp(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bp(?:rice)?\s+(.*)\s*/i], (payload, chat, data) => {
 	let query = data.match[1].toUpperCase();
 	let to = ['USD', 'BTC', 'ETH'];
 	fetch.convertPrice(query, to).then((response) => {
@@ -60,7 +60,7 @@ bot.hear([/\s*\bp(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
 });
 
 // c(onvert) ### XXX (to) YYY
-bot.hear([/\s*\bc(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S*)\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bc(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S*)\s*/i], (payload, chat, data) => {
 	if (data.captured) return;
 
 	let amount = data.match[1];
@@ -90,7 +90,7 @@ bot.hear([/\s*\bc(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\
 	});
 });
 
-bot.hear([/\s*\bc(?:onvert)?\s*(?:.*)?\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bc(?:onvert)?\s*(?:.*)?\s*/i], (payload, chat, data) => {
 	if (data.captured) return;
 
 	chat.say('Please specify your request like so: convert amount original (to) final', {
@@ -102,13 +102,84 @@ bot.hear([/\s*\bc(?:onvert)?\s*(?:.*)?\s*$/i], (payload, chat, data) => {
 	})
 });
 
-// t(est) XXX
-bot.hear([/\s*\bt(?:est)?\s+(.*)\s*$/i], (payload, chat, data) => {
+// s(ub(scribe)) (to) XXX
+bot.hear([/\s*\bs(?:ub(?:scribe)?)?\s+(?:to\s+)?\s*(\S*)\s*/i], (payload, chat, data) => {
 	let userId = payload.sender.id;
 	let coin = data.match[1].toUpperCase();
+
 	// Add Subcription for given coin
 	fire.addSub(userId, coin).then((response) => {
-		chat.say("Success!");
+		chat.say({
+			text: 'Subscribed to ' + coin,
+			buttons: [{
+				type: 'postback',
+				title: 'View Subs',
+				payload: 'VIEW_SUBS'
+			}]
+		});
+	}).catch((error) => {
+		console.log(error);
+		chat.say('Oops, something went wrong...', {
+			typing: true
+		}).then(() => {
+			chat.say(error.message);
+		});
+	});
+});
+
+// (view) s(ub(s)(scription(s)))
+bot.hear([/\s*\b(?:view)?\s+s(?:ubs?(?:criptions?)?)?\s*/i], (payload, chat, data) => {
+	let userId = payload.sender.id;
+
+	// Get subscriptions
+	fire.getSubs(userId).then((response) => {
+		chat.say({
+			text: 'Here are your subscriptions: ' + response.join(', ') + '. You can unsubscribe to any of them like so "Unsubscribe BTC"'
+		});
+	}).catch((error) => {
+		console.log(error);
+		chat.say('Oops, something went wrong...', {
+			typing: true
+		}).then(() => {
+			chat.say(error.message);
+		});
+	});
+});
+
+// View Subs Postback (button)
+bot.on('postback:VIEW_SUBS', (payload, chat, data) => {
+	let userId = payload.sender.id;
+
+	// Get subscriptions
+	fire.getSubs(userId).then((response) => {
+		chat.say({
+			text: 'Here are your subscriptions: ' + response.join(', ') + '. You can unsubscribe to any of them like so "Unsubscribe BTC"'
+		});
+	}).catch((error) => {
+		console.log(error);
+		chat.say('Oops, something went wrong...', {
+			typing: true
+		}).then(() => {
+			chat.say(error.message);
+		});
+	});
+});
+
+// u(nsub(scribe))
+bot.hear([/\s*\bu(?:nsub?(?:scribe)?)?\s+(?:from\s+)?\s*(\S*)\s*/i], (payload, chat, data) => {
+	let userId = payload.sender.id;
+	let coin = data.match[1].toUpperCase();
+
+	// Get subscriptions
+	fire.removeSub(userId, coin).then((response) => {
+		chat.say({
+			text: 'Unsubscribed from ' + coin,
+			buttons: [{
+				type: 'postback',
+				title: 'View Subs',
+				payload: 'VIEW_SUBS'
+			}]
+		});
 	}).catch((error) => {
 		console.log(error);
 		chat.say('Oops, something went wrong...', {
