@@ -100,7 +100,7 @@ bot.hear([/\s*\bc(?:onvert)?\s*(?:.*)?\s*/i], (payload, chat, data) => {
 		chat.say('Here is an example: convert 1 BTC to USD', {
 			typing: true
 		});
-	})
+	});
 });
 
 // s(ub(scribe)) (to) XXX
@@ -117,6 +117,8 @@ bot.hear([/\s*\bs(?:ub(?:scribe)?)?\s+(?:to\s+)?\s*(\S*)\s*/i], (payload, chat, 
 				title: 'View Subs',
 				payload: 'VIEW_SUBS'
 			}]
+		}, {
+			typing: true
 		});
 	}).catch((error) => {
 		console.log(error);
@@ -136,7 +138,9 @@ bot.hear([/\s*\b(?:view)?\s+s(?:ubs?(?:criptions?)?)?\s*/i], (payload, chat, dat
 
 	// Get subscriptions
 	fire.getSubs(userId).then((response) => {
-		chat.say('Here are your subscriptions: ' + response.join(', ') + '. You can unsubscribe to any of them like so "Unsubscribe BTC"');
+		chat.say('Here are your subscriptions: ' + response.join(', ') + '.\nYou can unsubscribe from any of them like so "Unsubscribe BTC"', {
+			typing: true
+		});
 	}).catch((error) => {
 		console.log(error);
 		chat.say('Oops, something went wrong...', {
@@ -153,7 +157,9 @@ bot.on('postback:VIEW_SUBS', (payload, chat, data) => {
 
 	// Get subscriptions
 	fire.getSubs(userId).then((response) => {
-		chat.say('Here are your subscriptions: ' + response.join(', ') + '. You can unsubscribe to any of them like so "Unsubscribe BTC"');
+		chat.say('Here are your subscriptions: ' + response.join(', ') + '.\nYou can unsubscribe from any of them like so "Unsubscribe BTC"', {
+			typing: true
+		});
 	}).catch((error) => {
 		console.log(error);
 		chat.say('Oops, something went wrong...', {
@@ -178,6 +184,8 @@ bot.hear([/\s*\bu(?:nsub?(?:scribe)?)?\s+(?:from\s+)?\s*(\S*)\s*/i], (payload, c
 				title: 'View Subs',
 				payload: 'VIEW_SUBS'
 			}]
+		}, {
+			typing: true
 		});
 	}).catch((error) => {
 		console.log(error);
@@ -185,6 +193,17 @@ bot.hear([/\s*\bu(?:nsub?(?:scribe)?)?\s+(?:from\s+)?\s*(\S*)\s*/i], (payload, c
 			typing: true
 		}).then(() => {
 			chat.say(error.message);
+		});
+	});
+});
+
+// u(nsub(scribe)) (from) XXX
+bot.hear([/\s*\bu(?:nsub?(?:scribe)?)?\s*/i], (payload, chat, data) => {
+	chat.say('Please specify your request like so: "Unsubscribe (from) coin"', {
+		typing: true
+	}).then(() => {
+		chat.say('Here is an example: "Unsubscribe from BTC"', {
+			typing: true
 		});
 	});
 });
