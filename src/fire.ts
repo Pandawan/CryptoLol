@@ -16,6 +16,7 @@ export function init() {
 
 // Add a subscription to the given coin
 export function addSub(id: string, coin: string) {
+	init();
 	return new Promise((resolve, reject) => {
 		// Get a Database Object
 		let db = admin.firestore();

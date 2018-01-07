@@ -21,13 +21,13 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
-bot.hear([/\s*p(?:rice)\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bp(?:rice)\s*$/i], (payload, chat, data) => {
 	chat.say('Please specify for which currency you want the prices (BTC, ETH...)', {
 		typing: true
 	});
 });
 
-bot.hear([/\s*p(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bp(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
 	let query = data.match[1].toUpperCase();
 	let to = ['USD', 'BTC', 'ETH'];
 	fetch.convertPrice(query, to).then((response) => {
@@ -60,7 +60,7 @@ bot.hear([/\s*p(?:rice)?\s+(.*)\s*$/i], (payload, chat, data) => {
 });
 
 // c(onvert) ### XXX (to) YYY
-bot.hear([/\s*c(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S*)\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bc(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S*)\s*$/i], (payload, chat, data) => {
 	if (data.captured) return;
 
 	let amount = data.match[1];
@@ -90,7 +90,7 @@ bot.hear([/\s*c(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S*
 	});
 });
 
-bot.hear([/\s*c(?:onvert)?\s*(?:.*)?\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bc(?:onvert)?\s*(?:.*)?\s*$/i], (payload, chat, data) => {
 	if (data.captured) return;
 
 	chat.say('Please specify your request like so: convert amount original (to) final', {
@@ -103,7 +103,7 @@ bot.hear([/\s*c(?:onvert)?\s*(?:.*)?\s*$/i], (payload, chat, data) => {
 });
 
 // t(est) XXX
-bot.hear([/\s*t(?:est)?\s+(.*)\s*$/i], (payload, chat, data) => {
+bot.hear([/\s*\bt(?:est)?\s+(.*)\s*$/i], (payload, chat, data) => {
 	let userId = payload.sender.id;
 	let coin = data.match[1].toUpperCase();
 	// Add Subcription for given coin
