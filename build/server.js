@@ -21,7 +21,7 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
-bot.hear([/\s*\bp(?:rice)?\s+(.*)\s*/i], (payload, chat, data) => {
+bot.hear([/\s*\bp(?:rice)?\s+(?:of\s+)?\s*(.*)\s*/i], (payload, chat, data) => {
 	let query = data.match[1].toUpperCase();
 	let to = ['USD', 'BTC', 'ETH'];
 	fetch.convertPrice(query, to).then((response) => {
@@ -53,7 +53,7 @@ bot.hear([/\s*\bp(?:rice)?\s+(.*)\s*/i], (payload, chat, data) => {
 	});
 });
 
-bot.hear([/\s*\bp(?:rice)\s*/i], (payload, chat, data) => {
+bot.hear([/\s*\bp(?:rice)\s+(?:of\s+)?\s*/i], (payload, chat, data) => {
 	if (data.captured) return;
 
 	chat.say('Please specify for which currency you want the prices (BTC, ETH...)', {
