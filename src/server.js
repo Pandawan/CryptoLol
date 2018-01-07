@@ -21,12 +21,6 @@ bot.hear([/hello( there)?/i, /hi( there)?/i, /hey( there)?/i], (payload, chat) =
 	});
 });
 
-bot.hear([/\s*\bp(?:rice)\s*/i], (payload, chat, data) => {
-	chat.say('Please specify for which currency you want the prices (BTC, ETH...)', {
-		typing: true
-	});
-});
-
 bot.hear([/\s*\bp(?:rice)?\s+(.*)\s*/i], (payload, chat, data) => {
 	let query = data.match[1].toUpperCase();
 	let to = ['USD', 'BTC', 'ETH'];
@@ -59,9 +53,16 @@ bot.hear([/\s*\bp(?:rice)?\s+(.*)\s*/i], (payload, chat, data) => {
 	});
 });
 
+bot.hear([/\s*\bp(?:rice)\s*/i], (payload, chat, data) => {
+	if (data.captured) return;
+
+	chat.say('Please specify for which currency you want the prices (BTC, ETH...)', {
+		typing: true
+	});
+});
+
 // c(onvert) ### XXX (to) YYY
 bot.hear([/\s*\bc(?:onvert)?\s+([0-9]+(?:[,.][0-9]*)?)\s+(\S*)\s+(?:to\s+)?\s*(\S*)\s*/i], (payload, chat, data) => {
-	if (data.captured) return;
 
 	let amount = data.match[1];
 	let from = data.match[2].toUpperCase();
@@ -127,13 +128,13 @@ bot.hear([/\s*\bs(?:ub(?:scribe)?)?\s+(?:to\s+)?\s*(\S*)\s*/i], (payload, chat, 
 
 // (view) s(ub(s)(scription(s)))
 bot.hear([/\s*\b(?:view)?\s+s(?:ubs?(?:criptions?)?)?\s*/i], (payload, chat, data) => {
+	if (data.captured) return;
+
 	let userId = payload.sender.id;
 
 	// Get subscriptions
 	fire.getSubs(userId).then((response) => {
-		chat.say({
-			text: 'Here are your subscriptions: ' + response.join(', ') + '. You can unsubscribe to any of them like so "Unsubscribe BTC"'
-		});
+		chat.say('Here are your subscriptions: ' + response.join(', ') + '. You can unsubscribe to any of them like so "Unsubscribe BTC"');
 	}).catch((error) => {
 		console.log(error);
 		chat.say('Oops, something went wrong...', {
@@ -150,9 +151,7 @@ bot.on('postback:VIEW_SUBS', (payload, chat, data) => {
 
 	// Get subscriptions
 	fire.getSubs(userId).then((response) => {
-		chat.say({
-			text: 'Here are your subscriptions: ' + response.join(', ') + '. You can unsubscribe to any of them like so "Unsubscribe BTC"'
-		});
+		chat.say('Here are your subscriptions: ' + response.join(', ') + '. You can unsubscribe to any of them like so "Unsubscribe BTC"');
 	}).catch((error) => {
 		console.log(error);
 		chat.say('Oops, something went wrong...', {
@@ -163,7 +162,7 @@ bot.on('postback:VIEW_SUBS', (payload, chat, data) => {
 	});
 });
 
-// u(nsub(scribe))
+// u(nsub(scribe)) (from) XXX
 bot.hear([/\s*\bu(?:nsub?(?:scribe)?)?\s+(?:from\s+)?\s*(\S*)\s*/i], (payload, chat, data) => {
 	let userId = payload.sender.id;
 	let coin = data.match[1].toUpperCase();
