@@ -113,6 +113,7 @@ bot.hear([/\s*\bs(?:ub(?:scribe)?)?\s+(?:to\s+)?\s*(\S*)\s*/i], (payload, chat, 
 		chat.say({
 			text: 'Subscribed to ' + coin,
 			buttons: [
+				{ type: 'postback', title: 'Cancel Subscription', payload: 'UNSUB_' + coin },
 				{ type: 'postback', title: 'View Subs', payload: 'VIEW_SUBS' }
 			]
 		}, { typing: true });
@@ -127,7 +128,7 @@ bot.hear([/\s*\bs(?:ub(?:scribe)?)?\s+(?:to\s+)?\s*(\S*)\s*/i], (payload, chat, 
 });
 
 // (view) s(ub(s)(scription(s)))
-bot.hear([/\s*\b(?:view)?\s+s(?:ubs?(?:criptions?)?)?\s*/i], (payload, chat, data) => {
+bot.hear([/\s*\b(?:view\s+)?s(?:ubs?(?:criptions?)?)?\s*/i], (payload, chat, data) => {
 	if (data.captured) return;
 
 	let userId = payload.sender.id;
@@ -162,12 +163,35 @@ bot.on('postback:VIEW_SUBS', (payload, chat, data) => {
 	});
 });
 
+// UnSub Postback (button)
+bot.on(/postback:UNSUB_(\S*)/i, (payload, chat, data) => {
+	let userId = payload.sender.id;
+	let sub = data.match[1].toUpperCase();
+
+	// Remove subscriptions
+	fire.removeSub(userId, coin).then((response) => {
+		chat.say({
+			text: 'Unsubscribed from ' + coin,
+			buttons: [
+				{ type: 'postback', title: 'View Subs', payload: 'VIEW_SUBS' }
+			]
+		}, { typing: true });
+	}).catch((error) => {
+		console.log(error);
+		chat.say('Oops, something went wrong...', {
+			typing: true
+		}).then(() => {
+			chat.say(error.message);
+		});
+	});
+});
+
 // u(nsub(scribe)) (from) XXX
 bot.hear([/\s*\bu(?:nsub?(?:scribe)?)?\s+(?:from\s+)?\s*(\S*)\s*/i], (payload, chat, data) => {
 	let userId = payload.sender.id;
 	let coin = data.match[1].toUpperCase();
 
-	// Get subscriptions
+	// Remove subscriptions
 	fire.removeSub(userId, coin).then((response) => {
 		chat.say({
 			text: 'Unsubscribed from ' + coin,
@@ -187,6 +211,8 @@ bot.hear([/\s*\bu(?:nsub?(?:scribe)?)?\s+(?:from\s+)?\s*(\S*)\s*/i], (payload, c
 
 // u(nsub(scribe)) (from) XXX
 bot.hear([/\s*\bu(?:nsub?(?:scribe)?)?\s*/i], (payload, chat, data) => {
+	if (data.captured) return;
+
 	chat.say('Please specify your request like so: "Unsubscribe (from) coin"', {
 		typing: true
 	}).then(() => {
